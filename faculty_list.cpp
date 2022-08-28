@@ -1,3 +1,10 @@
+/*********
+ * Singly Linked List
+ * for CS2233
+ * Abhay Shankar K
+ * cs21btech11001
+*/
+
 #include <iostream>
 using namespace std;
 
@@ -44,7 +51,6 @@ class Collection
     node * search(string nm);
     void insert();
     void remove(string nm);
-    void get(string nm);
     void display();
     public:
     void start();
@@ -59,6 +65,7 @@ class Collection
     }
 };
 
+//insert at front
 void Collection::insert()
 {
     node * in = new node();
@@ -69,15 +76,7 @@ void Collection::insert()
     cout << "Inserted." << endl;
 }
 
-void Collection::get(string nm){
-    node * current = search(nm);
-    if(!current){
-        cout << "No such entry." << endl;
-        return;
-    }
-    current->show();
-}
-
+//full list
 void Collection::display()
 {
     node * current = head;
@@ -87,6 +86,7 @@ void Collection::display()
     }
 }
 
+//staraightforward deletion
 void Collection::remove(string nm)
 {
     if(head == nullptr) {
@@ -100,7 +100,7 @@ void Collection::remove(string nm)
     }
     node * out = *current;
     if(!out){
-        
+
     }
     *current = (*current)->next;
     delete out;
@@ -108,6 +108,7 @@ void Collection::remove(string nm)
     cout << "Deleted." << endl;
 }
 
+//used in "is" and "get".
 node * Collection::search(string nm)
 {
     node * current = head;
@@ -118,26 +119,7 @@ node * Collection::search(string nm)
     return nullptr;
 }
 
-// void Collection::reverse()
-// {
-//     if(head == nullptr){
-//         std::cout << "Empty." << std::endl;
-//         return;
-//     }
-//     if(head->next == nullptr) return;
-//     node * current = head;
-//     head = head->next;
-//     node * ss = head->next;
-//     current->next = nullptr;
-//     while(ss != nullptr){
-//         head->next = current;
-//         current = head;
-//         head = ss;
-//         ss = ss->next;
-//     }
-//     head->next = current;
-// }
-
+//UI
 void Collection::start()
 {
     std::cout << "Following are the acceptable commands:\n\n"
@@ -170,7 +152,11 @@ void Collection::start()
         else if(cmd == "get"){
             string nm;
             std::cin >> nm;
-            get(nm);
+            node * current = search(nm);
+            if(!current)
+                cout << "No such entry." << endl;
+            
+            else current->show();
         }
         else if(cmd == "dis"){
             std::cout << std::endl;
@@ -183,16 +169,6 @@ void Collection::start()
         }
     }
 }
-
-/***********
- * The Collection::start function accepts the following commands from the terminal:
- *  add <value> : Adds a node to the list.
- *  del <value> : Removes node with that value.
- *  get <value> : Prints the node at <value>.
- *  rev : reverses the list.
- *  dis : prints entire list.
- *  destroy : destroys list.
-*/
 
 int main()
 {

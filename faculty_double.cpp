@@ -1,14 +1,20 @@
-#include <iostream>
+/*********
+ * Doubly Linked List
+ * for CS2233
+ * Abhay Shankar K
+ * cs21btech11001
+*/
 
+#include <iostream>
 using namespace std;
 
 class node{
+    public:
     string name;
     int age;
     char gender;// M or F
     string dept;
 
-    public:
     node * next;
     node * prev;
 
@@ -63,6 +69,7 @@ class Collection
     }
 };
 
+//insert at start
 void Collection::insert()
 {
     node * inc = new node();
@@ -74,6 +81,7 @@ void Collection::insert()
     cout << "Inserted." << endl;
 }
 
+//straightfowrward deletion
 void Collection::remove(string nm){
     node * out = search(nm);
     if(!out){
@@ -84,73 +92,72 @@ void Collection::remove(string nm){
         head = out->next;
         delete out;
         cout << "Head moved." << endl;
+        return;
     }
 
-    
+    out->prev->next = out->next;
+    out->next->prev = out->prev;
+    delete out;
+    cout << "Deleted." << endl;
 }
 
-// void Collection::remove(string nm)
-// {
-//     if(head == nullptr) {
-//         cout << "List is empty." << endl;
-//         return;
-//     }
-//     node ** current = &head;
-    
-//     while(*current && (*current)->name != nm){
-//         current = &(*current)->next;
-//     }
-//     node * out = *current;
-//     if(!out){
-//         cout << "No such entry." << endl;
-//         return;
-//     }
-//     *current = (*current)->next;
-//     delete out;
-
-//     cout << "Deleted." << endl;
-// }
-
-node * Collection::search(int val)
+//used in "is" and "get"
+node * Collection::search(string nm)
 {
-    node * current = head;
+    node * current = head;  
     while(current != nullptr){
-        if(current->n == val) return current;
+        if(current->name == nm) return current;
         current = current->next;
     }
     return nullptr;
 }
 
+//full list
 void Collection::display()
 {
     node * current = head;
     while(current != nullptr){
-        std::cout << current->n << std::endl;
+        current->show();
         current = current->next;
     }
 }
 
+//UI
 void Collection::start()
 {
+    std::cout << "Following are the acceptable commands:\n\n"
+    "  add : Adds a node to the list after accepting data.\n"
+ "  del <name> : Removes member with that name.\n"
+ "  get <name> : Prints the data for <name>.\n"
+ "  is <name> : Prints 'yes' if entry exists, 'no' otherwise."
+ "  dis : prints entire list.\n"
+ "  destroy : destroys list.\n" << endl;
     string cmd;
     while(true){
-        cout << "Enter command." << std::endl << std::endl << ">>> ";
-        cin >> cmd;
+        std::cout << "Enter command.\n\n" << ">>> ";
+        std::cin >> cmd;
         if(cmd == "add"){
-            int val;
-            cin >> val;
-            insert(val);
-            cout << "Added." << std::endl << std::endl;
+            insert();
+        }
+        else if(cmd == "is"){
+            string nm;
+            std::cin >> nm;
+            node * out = search(nm);
+            if(out) cout << "YES" << endl;
+            else cout << "NO" << endl;
         }
         else if(cmd == "del"){
-            int val;
-            std::cin >> val;
-            remove(val);
-            std::cout << "Deleted." << std::endl << std::endl;
+            string nm;
+            std::cin >> nm;
+            remove(nm);
+            // std::cout << "Deleted." << std::endl << std::endl;
         }
-        else if(cmd == "rev"){
-            reverse();
-            std::cout << "Reversed" << std::endl << std::endl;
+        else if(cmd == "get"){
+            string nm;
+            std::cin >> nm;
+            node * current = search(nm);
+            if(!current) cout << "No such entry." << endl;
+            else current->show();
         }
         else if(cmd == "dis"){
             std::cout << std::endl;
@@ -159,35 +166,10 @@ void Collection::start()
         }
         else if(cmd == "destroy") return;
         else{
-            std::cout << "Invalid command." << std::endl << std::endl;
+            std::cout << '\'' << cmd << "' is an invalid command." << std::endl << std::endl;
         }
     }
 }
-
-void Collection::reverse()
-{
-    if(head == nullptr){
-        std::cout << "Empty." << std::endl;
-        return;
-    }
-    if(head->next == nullptr) return;
-    node * current = head;
-    head = head->next;
-    node * ss = head->next;
-    current->next = nullptr;
-
-    while(ss != nullptr){
-        head->next = current;
-        current->prev = head;
-        current = head;
-        head = ss;
-        ss = ss->next;
-    }
-    head->next = current;
-    current->prev = head;
-}
-
-
 
 int main()
 {
