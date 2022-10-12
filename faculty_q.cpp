@@ -55,20 +55,20 @@ bool Queue::isFull()
 void Queue::enq(int val)
 {
     if(isFull()){
-        printf("Full.\n\n");
+        cout << "Full." << endl;
         return;
     }
     data[end] = val;
     end = (end + 1) % max;
+    cout << "Enqueued." << endl;
 }
 
 //dequeue
 int Queue::deq()
 {
-    if(isEmpty()){
-        printf("Empty.\n");
+    if(isEmpty())
         return -1;
-    }
+    
     int out = data[start];
     start = (start + 1) % max;
     return out;
@@ -76,8 +76,13 @@ int Queue::deq()
 
 //full queue
 void Queue::disp(){
+    if(isEmpty()){
+        cout << "Empty." << endl;
+        return;
+    }
     for(int i = start; i != end; i = (i + 1)%max)
-        cout << data[i] << endl;
+        cout << data[i] << " ";
+    cout << endl;
 }
 
 //UI
@@ -87,8 +92,8 @@ void Queue::cli(){
     "deq : Dequeues value and prints it.\n"
     "empty : Prints 'YES' if queue is empty, 'NO' otherwise.\n"
     "full : Prints 'YES' if queue is full, 'NO' otherwise.\n"
-    "dis : Displays queue.\n"
-    "destroy : destroys queue and terminates program.\n" << endl;
+    "show : Displays queue.\n"
+    "exit : destroys queue and terminates program.\n" << endl;
 
     std::string cmd;
     while(true){
@@ -111,10 +116,10 @@ void Queue::cli(){
         else if(cmd == "full"){
             std::cout << (isFull() ? "YES" : "NO") << std::endl;
         }
-        else if(cmd == "dis"){
+        else if(cmd == "show"){
             disp();
         }
-        else if(cmd == "destroy"){
+        else if(cmd == "exit"){
             return;
         }
         else{

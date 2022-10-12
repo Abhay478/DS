@@ -28,7 +28,8 @@ class node{
     }
     void show()
     {
-        cout << "\nName: " << name <<
+        cout << "--------" << endl;
+        cout << "Name: " << name <<
         "\nAge: " << age <<
         "\nGender: " << gender <<
         "\nDepartment: " << dept << endl;
@@ -38,15 +39,22 @@ class node{
         cout << "Enter name." << endl;
         cin >> name;
         cout << "Enter age." << endl;
-        cin >> age;
-        char g;
-        cout << "Enter gender (M or F)." << endl;
-        cin >> g;
-        while(g != 'M' && g != 'F'){
-            cout << "Entered gender is not supported. Please enter 'M' or 'F'." << endl;
-            cin >> g;
+        // cin >> age;
+        while(!(cin >> age) || age < 0){
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Age must be a positive integer." << endl;
         }
-        gender = g;
+        
+        // char g;
+        cout << "Enter gender (M or F)." << endl;
+        // cin >> g; 
+        while(!(cin >> gender) || (gender != 'M' && gender != 'F')){
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Entered gender " << gender << " is not supported. Please enter 'M' or 'F'." << endl;
+        }
+        // gender = g;
         cout << "Enter department." << endl;
         cin >> dept;
         cout << endl;
@@ -224,14 +232,14 @@ void Tree::postorder(node * current)
 void Tree::start()
 {
     std::cout << "Following are the acceptable commands : \n\n"
-    "add <value> : adds node to tree with given value.\n"
-    "del <value> : deletes node containing given value.\n"
-    "is <value> : prints 'yes' if vaule exists, 'no' otherwise."
-    "get <name> : prinnts data of <name>."
+    "add : adds node to tree.\n"
+    "del <name> : deletes node containing given member.\n"
+    "search <value> : prints 'yes' if vaule exists, 'no' otherwise.\n"
+    "fetch <name> : prinnts data of <name>.\n"
     "in : inorder traversal.\n"
-    "pre : preorder traversal.\n"
-    "post : postorder traversal.\n"
-    "destroy : deletes tree and terminates program.\n\n";
+    // "pre : preorder traversal.\n"
+    // "post : postorder traversal.\n"
+    "exit : deletes tree and terminates program.\n\n";
 
     string cmd;
     while(true){
@@ -252,7 +260,7 @@ void Tree::start()
             inorder(root);
             std::cout << std::endl;
         }
-        else if(cmd == "is"){
+        else if(cmd == "search"){
             string name;
             cin >> name;
             node * is = search(name);
@@ -260,12 +268,13 @@ void Tree::start()
             else cout << "NO" << endl;
 
         }
-        else if(cmd == "get"){
+        else if(cmd == "fetch"){
             string name;
             cin >> name;
             node * t = search(name);
-            t->show();s
+            t->show();
         }
+        /*
         else if(cmd == "pre"){
             std::cout << std::endl;
             preorder(root);
@@ -275,8 +284,8 @@ void Tree::start()
             std::cout << std::endl;
             postorder(root);
             std::cout << std::endl;
-        }
-        else if(cmd == "destroy") return;
+        }*/
+        else if(cmd == "exit") return;
         else{
             std::cout << "Invalid command." << std::endl << std::endl;
         }

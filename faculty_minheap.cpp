@@ -130,7 +130,8 @@ void Heap::start()
 int main()
 {
     Heap * h = new Heap();
-
+    
+/*
     // vector<int> v = { 1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16 };
     // for(auto i : v){
     //     h->insert(16 - i);
@@ -141,7 +142,8 @@ int main()
     //     h->extract();
     // }
     // h->extract();
-
+*/
+    
     h->start();
 
     delete h;

@@ -34,7 +34,8 @@ class node{
 
     inline void show()
     {
-        cout << "\nName: " << name <<
+        cout << "--------" << endl;
+        cout << "Name: " << name <<
         "\nAge: " << age <<
         "\nGender: " << gender <<
         "\nDepartment: " << dept << endl;
@@ -73,7 +74,6 @@ node * node::next()
     else{
         current = current->right;
         while(!current->lth)
-                cout << "seg" << endl;
             current = current->left;
     }
     return current;
@@ -118,7 +118,9 @@ class Tree{
     void insert();
     void remove(string name);
     void remove_sub(node * req, node * p);
-    node * search(int val) {return nullptr;};
+    node * search(string name);
+
+    void depth(node * q, int d);
 
     // ~Tree(){
     //     if(!root->lth){
@@ -307,6 +309,7 @@ void Tree::remove(string name)
         cout << "Hamare do." << endl;
         node * current = req->next(); //current with be l-threaded.
         req->clone(current);
+        cout << "Break." << endl;
         if(current->rth) p = (current != req->right)?current->right:current->left; //current is leaf. its right is its parent, except when it is its parent's right, in which case its left will be its parent.
         // else p = current->next()->right; //makes no sense.
         else{
@@ -322,6 +325,10 @@ void Tree::remove(string name)
 
 //used in "get" and "is".
 node * Tree::search(string name){
+    if(root == nullptr){
+        cout << "Empty." << endl;
+        return nullptr;
+    }
     node * current = root;
     while(true){
         if(name == current->name){
@@ -340,7 +347,18 @@ node * Tree::search(string name){
     return current;
 }
 
-//UI
+void Tree::depth(node * q, int d)
+{
+    int k = d + 1;
+    while(d--)
+        cout << "    ";
+    
+    cout << q->name << endl;
+    if(!q->lth) depth(q->left, k);
+    if(!q->rth) depth(q->right, k);
+}
+
+/*//UI
 void Tree::start()
 {
     std::cout << "Following are the acceptable commands : \n\n"
@@ -384,12 +402,77 @@ void Tree::start()
         }
     }
 }
+*/
+
+void Tree::start()
+{
+    std::cout << "Following are the acceptable commands : \n\n"
+    "add : adds node to tree.\n"
+    "del <name> : deletes node containing given member.\n"
+    "search <value> : prints 'yes' if vaule exists, 'no' otherwise.\n"
+    "fetch <name> : prinnts data of <name>.\n"
+    "in : inorder traversal.\n"
+    // "pre : preorder traversal.\n"
+    // "post : postorder traversal.\n"
+    "exit : deletes tree and terminates program.\n\n";
+
+    string cmd;
+    while(true){
+        cout << "Enter command.\n\n>>> ";
+        cin >> cmd;
+        if(cmd == "add"){
+            insert();
+            // cout << "Added." << std::endl << std::endl;
+        }
+        else if(cmd == "del"){
+            string name;
+            cin >> name;
+            remove(name);
+            // std::cout << "Deleted." << std::endl << std::endl;
+        }
+        else if(cmd == "in"){
+            std::cout << std::endl;
+            inorder();
+            std::cout << std::endl;
+        }
+        else if(cmd == "search"){
+            string name;
+            cin >> name;
+            node * is = search(name);
+            if(is) cout << "YES" << endl;
+            else cout << "NO" << endl;
+
+        }
+        else if(cmd == "fetch"){
+            string name;
+            cin >> name;
+            node * t = search(name);
+            t->show();
+        }
+        /*
+        else if(cmd == "pre"){
+            std::cout << std::endl;
+            preorder(root);
+            std::cout << std::endl;
+        }
+        else if(cmd == "post"){
+            std::cout << std::endl;
+            postorder(root);
+            std::cout << std::endl;
+        }*/
+        else if(cmd == "exit") return;
+        else{
+            std::cout << "Invalid command." << std::endl << std::endl;
+        }
+    }
+}
 
 int main()
 {
     Tree * t = new Tree();
 
     t->start();
+    t->depth(t->root, 0);
     delete t;
 
 }

@@ -20,7 +20,8 @@ class node{
 
     void show()
     {
-        cout << "\nName: " << name <<
+        cout << "--------------" << endl;
+        cout << "Name: " << name <<
         "\nAge: " << age <<
         "\nGender: " << gender <<
         "\nDepartment: " << dept << endl;
@@ -30,15 +31,22 @@ class node{
         cout << "Enter name." << endl;
         cin >> name;
         cout << "Enter age." << endl;
-        cin >> age;
-        char g;
-        cout << "Enter gender (M or F)." << endl;
-        cin >> g;
-        while(g != 'M' && g != 'F'){
-            cout << "Entered gender is not supported. Please enter 'M' or 'F'." << endl;
-            cin >> g;
+        // cin >> age;
+        while(!(cin >> age) || age < 0){
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Age must be a positive integer." << endl;
         }
-        gender = g;
+        
+        // char g;
+        cout << "Enter gender (M or F)." << endl;
+        // cin >> g; 
+        while(!(cin >> gender) || (gender != 'M' && gender != 'F')){
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Entered gender " << gender << " is not supported. Please enter 'M' or 'F'." << endl;
+        }
+        // gender = g;
         cout << "Enter department." << endl;
         cin >> dept;
         cout << endl;
@@ -101,7 +109,7 @@ void Collection::remove(string nm){
     cout << "Deleted." << endl;
 }
 
-//used in "is" and "get"
+//used in "search" and "get"
 node * Collection::search(string nm)
 {
     node * current = head;  
@@ -115,6 +123,11 @@ node * Collection::search(string nm)
 //full list
 void Collection::display()
 {
+    if(head == nullptr)
+    {
+        cout << "List is empty." << endl;
+        return;
+    }
     node * current = head;
     while(current != nullptr){
         current->show();
@@ -128,10 +141,10 @@ void Collection::start()
     std::cout << "Following are the acceptable commands:\n\n"
     "  add : Adds a node to the list after accepting data.\n"
  "  del <name> : Removes member with that name.\n"
- "  get <name> : Prints the data for <name>.\n"
- "  is <name> : Prints 'yes' if entry exists, 'no' otherwise."
- "  dis : prints entire list.\n"
- "  destroy : destroys list.\n" << endl;
+ "  fetch <name> : Prints the data for <name>.\n"
+ "  search <name> : Prints 'yes' if entry exists, 'no' otherwise."
+ "  show : prints entire list.\n"
+ "  exit : destroys list and terminates program.\n" << endl;
     string cmd;
     while(true){
         std::cout << "Enter command.\n\n" << ">>> ";
@@ -139,7 +152,7 @@ void Collection::start()
         if(cmd == "add"){
             insert();
         }
-        else if(cmd == "is"){
+        else if(cmd == "search"){
             string nm;
             std::cin >> nm;
             node * out = search(nm);
@@ -152,19 +165,19 @@ void Collection::start()
             remove(nm);
             // std::cout << "Deleted." << std::endl << std::endl;
         }
-        else if(cmd == "get"){
+        else if(cmd == "fetch"){
             string nm;
             std::cin >> nm;
             node * current = search(nm);
             if(!current) cout << "No such entry." << endl;
             else current->show();
         }
-        else if(cmd == "dis"){
+        else if(cmd == "show"){
             std::cout << std::endl;
             display();
             std::cout << std::endl;
         }
-        else if(cmd == "destroy") return;
+        else if(cmd == "exit") return;
         else{
             std::cout << '\'' << cmd << "' is an invalid command." << std::endl << std::endl;
         }

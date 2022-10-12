@@ -38,7 +38,6 @@ class Tree{
     {
         nil = new node(-1, nullptr);
         root = nil;
-
     }
 
     void start();
@@ -102,6 +101,9 @@ void Tree::lrot(node ** z)
     y->p = x->p;
     x->p = y;
     if(b != nil) b->p = x;
+    if(y == root)
+        nil->left = nil->right = y;
+    
 
 }
 
@@ -119,34 +121,41 @@ void Tree::rrot(node ** z)
     x->p = y->p;
     y->p = x;
     if(b != nil) b->p = y;
-
+    if(x == root) nil->left = nil->right = x;
 }
 
 void Tree::cleanup(node * z)
 {
-    // node * x = z->p;
-    // node * w = x->p;
     node * y;
 
-    while(z->p->c){
+    while(z->p->c){ // z is never root (look in insert()), and so z.p not nil.
+        
+        //it is sufficient to reset the colour of root, if indeed the bh difference has been passed till the root's child.
+        if(z->p == root){
+            z->p->c = false;
+            break;
+        }
+        
+        //z.p.p is not nil, as z.p is not root.
         if(z->p == z->p->p->left){
             y = z->p->p->right;
             if(y->c){
                 z->p->c = false;
-                y->c = false;
+                y->c = false; //its okay if y is nil.
                 z->p->p->c = true;
                 cout << "Here.";
                 z = z->p->p;
-                if(z == root) break;
-    // cout << "In cleanup" << endl;
+                if(z == root || z == nil) break; //makes sure.
             }
-            else if(z == z->p->right){
+            else {if(z == z->p->right){
                 z = z->p;
                 lrot(&z);
+                z = z->left;
             }
             z->p->c = false;
             z->p->p->c = true;
-            rrot(&(z->p->p));
+            node * w = z->p->p;
+            rrot(&w);}
         }
         else{
             y = z->p->p->left;
@@ -155,10 +164,12 @@ void Tree::cleanup(node * z)
                 y->c = false;
                 z->p->p->c = true;
                 z = z->p->p;
+                if(z == root) break;
             }
             else if(z == z->p->left){
                 z = z->p;
-                lrot(&z);
+                rrot(&z);
+                z = z->right;
             }
             z->p->c = false;
             z->p->p->c = true;
@@ -167,6 +178,7 @@ void Tree::cleanup(node * z)
     }
 
     root->c = false;
+    nil->c = false;
 }
 
 void Tree::insert(int val)
@@ -175,6 +187,7 @@ void Tree::insert(int val)
         root = new node(val, nil);
         root->c = false;
         nil->left = nil->right = root;
+        root->p = nil;
         cout << "Init" << endl;
         return;
     }
@@ -193,14 +206,15 @@ void Tree::insert(int val)
             x = x->left;
         } else x = x->right;
 
-        cout << "Loop";
+        // cout << "Loop";
     }
     z->p = y;
-    if(y == nil) root = z;
-    else if(z->n < y->n) y->left = z;
+    // if(y == nil) {root = z; nil->left = nil->right = z;}
+    if(z->n < y->n) y->left = z;
     else y->right = z;
-
+    
     cout << "Fix." << endl;
+    // root->p = nil;
     cleanup(z);
 }
 
