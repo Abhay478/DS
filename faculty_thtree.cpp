@@ -120,7 +120,7 @@ class Tree{
     void remove_sub(node * req, node * p);
     node * search(string name);
 
-    void depth(node * q, int d);
+    void depth(node * q, int d, int lr);
 
     // ~Tree(){
     //     if(!root->lth){
@@ -257,14 +257,14 @@ void Tree::insert()
 //traversal
 void Tree::inorder()
 {
-    node * current = root;
-    if(current == nullptr){
+    if(root == nullptr){
         cout << "Empty." << endl;
         return;
     }
-    while(current->left != nullptr){
+
+    node * current = root;
+    while(current->left != nullptr)
         current = current->left;
-    }
 
     cout << "Here goes." << endl;
 
@@ -347,15 +347,15 @@ node * Tree::search(string name){
     return current;
 }
 
-void Tree::depth(node * q, int d)
+void Tree::depth(node * q, int d, int lr)
 {
     int k = d + 1;
     while(d--)
         cout << "    ";
-    
+    cout << (lr ? "L: " : "R: ");
     cout << q->name << endl;
-    if(!q->lth) depth(q->left, k);
-    if(!q->rth) depth(q->right, k);
+    if(!q->lth) depth(q->left, k, 1);
+    if(!q->rth) depth(q->right, k, 0);
 }
 
 /*//UI
@@ -430,6 +430,10 @@ void Tree::start()
             remove(name);
             // std::cout << "Deleted." << std::endl << std::endl;
         }
+        else if(cmd == "tree"){
+            if(root) depth(root, 0, 0);
+            else cout << "Empty." << endl;
+        }
         else if(cmd == "in"){
             std::cout << std::endl;
             inorder();
@@ -472,7 +476,7 @@ int main()
     Tree * t = new Tree();
 
     t->start();
-    t->depth(t->root, 0);
+    t->depth(t->root, 0, 0);
     delete t;
 
 }
