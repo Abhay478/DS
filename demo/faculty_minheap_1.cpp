@@ -1,23 +1,9 @@
-// #include <stdio.h>
-// #include <stdlib.h>
-
-// typedef struct h{
-//     int * a;
-//     int n;
-// } Heap;
-
-// Heap * make(int n)
-// {
-//     Heap * out = calloc(n, sizeof(Heap));
-//     out->n = n;
-
-//     return out;
-// }
-
-// void insert(Heap * h, int val)
-// {
-    
-// }
+/*********
+ * Min-Heap as array
+ * for CS2233
+ * Abhay Shankar K
+ * cs21btech11001
+*/
 
 #include <iostream>
 #include <vector>
@@ -35,12 +21,14 @@ class Heap
     void start();
 };
 
+//Find min
 int Heap::peek()
 {
     if(a.size() > 0) return a.at(0);
     else return -1;
 }
 
+//delete min
 void Heap::extract()
 {
     if(a.empty()){
@@ -92,6 +80,7 @@ void Heap::extract()
     cout << out << endl;
 }
 
+//usual
 void Heap::insert(int val)
 {
     a.push_back(val);
@@ -109,6 +98,7 @@ void Heap::insert(int val)
     }
 }
 
+//UI
 void Heap::start()
 {
     cout << "Following are the acceptable commands:\n\n"
@@ -136,10 +126,12 @@ void Heap::start()
         else cout << "Invalid command.\n" << endl;
     }
 }
+
 int main()
 {
     Heap * h = new Heap();
-
+    
+/*
     // vector<int> v = { 1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13, 14, 15, 16 };
     // for(auto i : v){
     //     h->insert(16 - i);
@@ -150,7 +142,8 @@ int main()
     //     h->extract();
     // }
     // h->extract();
-
+*/
+    
     h->start();
 
     delete h;
